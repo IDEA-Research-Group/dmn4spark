@@ -24,3 +24,5 @@ target/
 .scala_dependencies
 .worksheet
 #src/main/scala/es/us/idea/adt/benchmark/*
+input/*
+models/*
