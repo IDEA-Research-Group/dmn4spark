@@ -60,7 +60,11 @@
             <artifactId>camunda-engine-plugin-spin</artifactId>
             <version>7.11.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>es.us.idea</groupId>
+            <artifactId>drools4spark</artifactId>
+            <version>1.0.0-RELEASE</version>
+        </dependency>
 
     </dependencies>
 
