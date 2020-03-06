@@ -7,6 +7,10 @@ object Utils {
   case class ColumnInfo(name: String, dataTypeWithAssignedValue: DataTypeWithAssignedValue)
   case class DataTypeWithAssignedValue(dataType: DataType, establishedValue: Option[Boolean] = None) extends Serializable
 
+  def createStructType(fieldNames: Seq[String]) = {
+    DataTypes.createStructType(fieldNames.map(DataTypes.createStructField(_, DataTypes.StringType, true)).toArray)
+  }
+
   /**
     *
     * @param str string containing the part of the rule consequence which includes the second argument of the

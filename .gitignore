@@ -26,3 +26,4 @@ target/
 #src/main/scala/es/us/idea/adt/benchmark/*
 input/*
 models/*
+src/main/java/es/us/idea/dmn4spark/Main.scala
