@@ -27,8 +27,8 @@ class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Se
    * */
   @transient lazy val dmnEngine: DmnEngine = {
     val dmnEngineConfig: DefaultDmnEngineConfiguration = DmnEngineConfiguration.createDefaultDmnEngineConfiguration.asInstanceOf[DefaultDmnEngineConfiguration]
-    dmnEngineConfig.setFeelEngineFactory(new CamundaFeelEngineFactory)
-    dmnEngineConfig.setDefaultOutputEntryExpressionLanguage("feel")
+    dmnEngineConfig.setFeelEngineFactory(new CamundaFeelEngineFactory())
+    dmnEngineConfig.setDefaultOutputEntryExpressionLanguage("feel-scala")
     dmnEngineConfig.buildEngine
   }
 
