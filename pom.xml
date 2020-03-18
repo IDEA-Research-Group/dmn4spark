@@ -6,7 +6,7 @@
 
     <groupId>es.us.idea</groupId>
     <artifactId>dmn4spark</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <dependencies>
 
@@ -48,24 +48,12 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.dmn/camunda-engine-dmn -->
-        <dependency>
-            <groupId>org.camunda.bpm.dmn</groupId>
-            <artifactId>camunda-engine-dmn</artifactId>
-            <version>7.12.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-engine
+        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-engine -->
         <dependency>
             <groupId>org.camunda.bpm.extension.feel.scala</groupId>
             <artifactId>feel-engine</artifactId>
-            <version>1.10.1</version>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-engine-plugin
-        <dependency>
-            <groupId>org.camunda.bpm.extension.feel.scala</groupId>
-            <artifactId>feel-engine-plugin</artifactId>
-            <version>1.10.1</version>
-        </dependency>-->
+            <version>1.8.0</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-engine-factory -->
         <dependency>
@@ -73,18 +61,20 @@
             <artifactId>feel-engine-factory</artifactId>
             <version>1.8.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.dmn/camunda-engine-dmn -->
+        <dependency>
+            <groupId>org.camunda.bpm.dmn</groupId>
+            <artifactId>camunda-engine-dmn</artifactId>
+            <version>7.10.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.camunda.bpm/camunda-engine-plugin-spin -->
         <dependency>
             <groupId>org.camunda.bpm</groupId>
             <artifactId>camunda-engine-plugin-spin</artifactId>
-            <version>7.12.0</version>
+            <version>7.10.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-camunda-spin
-        <dependency>
-            <groupId>org.camunda.bpm.extension.feel.scala</groupId>
-            <artifactId>feel-camunda-spin</artifactId>
-            <version>1.8.0</version>
-        </dependency>-->
 
         <dependency>
             <groupId>es.us.idea</groupId>
