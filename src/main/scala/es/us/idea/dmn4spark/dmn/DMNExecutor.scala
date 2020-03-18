@@ -1,15 +1,11 @@
 package es.us.idea.dmn4spark.dmn
 
-import java.io.{ByteArrayInputStream, File, InputStream}
+import java.io.ByteArrayInputStream
 
-import org.apache.xerces.dom.DeferredDocumentImpl
+import es.us.idea.dmn4spark.dmn.engine.SafeCamundaFeelEngineFactory
 import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration
-import org.camunda.bpm.dmn.engine.{DmnDecision, DmnDecisionTableResult, DmnEngine, DmnEngineConfiguration}
+import org.camunda.bpm.dmn.engine.{DmnDecision, DmnEngine, DmnEngineConfiguration}
 import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance}
-import org.camunda.bpm.model.dmn.impl.instance.DecisionImpl
-import org.camunda.bpm.model.dmn.instance.DecisionTable
-import org.camunda.bpm.model.xml.impl.instance.DomElementImpl
-import org.camunda.feel.integration.CamundaFeelEngineFactory
 
 import scala.collection.JavaConverters
 
@@ -27,17 +23,15 @@ class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Se
    * */
   @transient lazy val dmnEngine: DmnEngine = {
     val dmnEngineConfig: DefaultDmnEngineConfiguration = DmnEngineConfiguration.createDefaultDmnEngineConfiguration.asInstanceOf[DefaultDmnEngineConfiguration]
-    dmnEngineConfig.setFeelEngineFactory(new CamundaFeelEngineFactory())
-    dmnEngineConfig.setDefaultOutputEntryExpressionLanguage("feel-scala")
+    dmnEngineConfig.setFeelEngineFactory(new SafeCamundaFeelEngineFactory)
+    dmnEngineConfig.setDefaultOutputEntryExpressionLanguage("feel")
     dmnEngineConfig.buildEngine
   }
 
 
-  // TODO read from hdfs??
   /**
    * Instantiate and configure the Camunda DMN Engine.
    * */
-  //@transient lazy val dmnModelInstance: DmnModelInstance = Dmn.readModelFromFile(new File(dmnPath));
   @transient lazy val dmnModelInstance: DmnModelInstance = Dmn.readModelFromStream(new ByteArrayInputStream(input))
 
   @transient lazy val decisions: Seq[DmnDecision] = JavaConverters.collectionAsScalaIterableConverter(dmnEngine.parseDecisions(dmnModelInstance)).asScala.toSeq
