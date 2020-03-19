@@ -76,12 +76,6 @@
             <version>7.10.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>es.us.idea</groupId>
-            <artifactId>drools4spark</artifactId>
-            <version>1.0.0-RELEASE</version>
-        </dependency>
-
     </dependencies>
 
     <repositories>
