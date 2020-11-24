@@ -10,6 +10,7 @@ import org.apache.commons.io.{FileUtils, IOUtils}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.hadoop.fs.FSDataInputStream
+import org.apache.spark.sql.api.java.{UDF0, UDF1}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -63,11 +64,14 @@ class DMNSparkEngine(df: DataFrame, selectedDecisions: Seq[String] = Seq())  {
 
     val originalColumns = df.columns.map(col).toSeq
 
-    val dmnUdf = udf((row: Row) => {
-      val map = SparkDataConversor.spark2javamap(row)
-      val result = dmnExecutor.getDecisionsResults(map)
-      Row.apply(result: _*)
-    }, Utils.createStructType(decisionColumns))
+    val func = new UDF1[Row, Row] {
+      override def call(t1: Row): Row = {
+        val map = SparkDataConversor.spark2javamap(t1)
+        val result = dmnExecutor.getDecisionsResults(map)
+        Row.apply(result: _*)
+      }
+    }
+    val dmnUdf = udf(func, Utils.createStructType(decisionColumns))
 
     val names = selectedColumns.map(d => (s"$tempColumn.$d", d))
 
