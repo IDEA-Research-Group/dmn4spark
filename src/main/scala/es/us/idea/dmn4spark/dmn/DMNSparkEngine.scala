@@ -57,7 +57,7 @@ class DMNSparkEngine(df: DataFrame, selectedDecisions: Seq[String] = Seq())  {
   private def execute(input: Array[Byte]) = {
     val tempColumn = s"__${System.currentTimeMillis().toHexString}"
 
-    val dmnExecutor = new DMNExecutor(input, selectedDecisions)
+    val dmnExecutor = new DMNExecutor(input)
 
     val decisionColumns = dmnExecutor.decisionKeys
     val selectedColumns = if(selectedDecisions.isEmpty) decisionColumns else selectedDecisions
