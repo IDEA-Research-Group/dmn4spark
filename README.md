@@ -1,5 +1,7 @@
 # dmn4spark
 
+![dmn4spar logo](logo/DMN4spark.png)
+
 dmn4spark is a library which enables developers to use the Camunda Decision Model and Notation (DMN) in Big Data
 environments with Apache Spark.
 
@@ -11,6 +13,14 @@ provides a set of data types and built-in function for making easier the constru
 its documentation for 
 
 ## Versions
+
+* dmn4spark 1.1.1. Dependencies:
+    * Scala 2.12
+    * Apache Spark 3.0.1
+    * [Feel Engine 1.14.0](https://github.com/camunda/feel-scala/tree/1.14.0/feel-engine)
+    * [Feel Engine Factory 1.14.0](https://github.com/camunda/feel-scala/tree/1.14.0/feel-engine-factory)
+    * [Camunda Engine DMN 7.10.0](https://github.com/camunda/camunda-engine-dmn/tree/7.10.0)
+
 
 * dmn4spark 1.0.0. Dependencies:
     * Scala 2.12
