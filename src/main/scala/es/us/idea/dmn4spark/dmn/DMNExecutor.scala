@@ -34,9 +34,17 @@ class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Se
    * */
   @transient lazy val dmnModelInstance: DmnModelInstance = Dmn.readModelFromStream(new ByteArrayInputStream(input))
 
+  /**
+   * Contains information on the DMN tables.
+   * */
   @transient lazy val decisions: Seq[DmnDecision] = JavaConverters.collectionAsScalaIterableConverter(dmnEngine.parseDecisions(dmnModelInstance)).asScala.toSeq
-  @transient lazy val decisionKeys: Seq[String] = decisions.map(_.getKey)
 
+  /**
+   * Decision keys are employed to include them in the resulting column names.
+   * */
+  @transient lazy val decisionKeys: Seq[String] = decisions.map(_.getName)
+
+  // TODO: catch and handle NullPointerExceptions
   def getDecisionsResults(map: java.util.HashMap[String, AnyRef]): Seq[String] = {
     decisions.map(d => dmnEngine.evaluateDecisionTable(d, map).getFirstResult.getEntry(d.getKey).toString)
   }

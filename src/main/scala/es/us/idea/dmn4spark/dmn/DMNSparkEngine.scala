@@ -15,6 +15,11 @@ import org.apache.spark.sql.api.java.{UDF0, UDF1}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
+/***
+ *
+ * @param df the DataFrame to be processed
+ * @param selectedDecisions the name of the DMN tables to include in the resulting DataFrame
+ */
 class DMNSparkEngine(df: DataFrame, selectedDecisions: Seq[String] = Seq())  {
 
   def setDecisions(decisions: String*): DMNSparkEngine = new DMNSparkEngine(df, decisions)
