@@ -1,13 +1,13 @@
 package es.us.idea.dmn4spark.dmn
 
 import java.io.ByteArrayInputStream
-
 import es.us.idea.dmn4spark.dmn.engine.SafeCamundaFeelEngineFactory
 import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration
 import org.camunda.bpm.dmn.engine.{DmnDecision, DmnEngine, DmnEngineConfiguration}
 import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance}
 
-import scala.collection.JavaConverters
+import collection.JavaConverters._
+import scala.collection.{JavaConverters, mutable}
 
 class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Serializable{
 
@@ -45,8 +45,43 @@ class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Se
   @transient lazy val decisionKeys: Seq[String] = decisions.map(_.getName)
 
   // TODO: catch and handle NullPointerExceptions
+
+  /***
+   *
+   * @param map input tuple from the DataFrame
+   * @return a sequence indicating the decision made for each DMN table in the DMN diagram
+   */
   def getDecisionsResults(map: java.util.HashMap[String, AnyRef]): Seq[String] = {
-    decisions.map(d => dmnEngine.evaluateDecisionTable(d, map).getFirstResult.getEntry(d.getKey).toString)
+    decisions.map(d => {
+      val evaluation = dmnEngine.evaluateDecisionTable(d, map)
+
+      val resultList = evaluation.getResultList
+
+      val processMap = (x: mutable.Map[String, AnyRef]) =>
+        x.keySet.size match {
+          case 1 => Some(x.head._2.toString)
+          case _>1 => Some("{" + x.map(t => s"\"${t._1}\": \"${t._2.toString}\"").mkString(", ") + "}")
+          case _ => System.err.println(s"DMNExecutor: The evaluation of the DMN Table with name ${d.getName} yielded no" +
+            s"results.\n Please, revise your DMN Diagram:" +
+            s"1) Does the following input match any rule? ${map.asScala.toString}" +
+            s"2) Have you correctly specified the dependencies? (${d.getName} requires the following tables: ${d.getRequiredDecisions.asScala.map(_.getName).mkString(", ")})" +
+            s"3) Have you correctly specified table keys?"); None
+        }
+
+      resultList.size() match {
+        case 1 => processMap(resultList.get(0).asScala)
+        case _>1 => s"[${resultList.asScala.map(m => processMap(m.asScala)).mkString(", ")}]"
+        case _ => System.err.println(s"DMNExecutor: The evaluation of the DMN Table with name ${d.getName} yielded no" +
+          s"results.\n Please, revise your DMN Diagram:" +
+          s"1) Does the following input match any rule? ${map.asScala.toString}" +
+          s"2) Have you correctly specified the dependencies? (${d.getName} requires the following tables: ${d.getRequiredDecisions.asScala.map(_.getName).mkString(", ")})" +
+          s"3) Have you correctly specified table keys?"); None
+      }
+
+      // val firstResult = evaluation.getFirstResult
+      // val resultValue = firstResult.getEntry(d.getKey).toString
+      // resultValue
+    })
   }
 
 }

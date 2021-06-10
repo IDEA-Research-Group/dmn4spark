@@ -15,6 +15,7 @@ import org.apache.spark.sql.api.java.{UDF0, UDF1}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
+// TODO: Include a parameter to allow hiding logs
 /***
  *
  * @param df the DataFrame to be processed
