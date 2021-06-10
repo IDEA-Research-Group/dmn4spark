@@ -1,5 +1,4 @@
 # dmn4spark
-
 ![dmn4spark logo](figures/DMN4Spark.png)
 
 dmn4spark is a library which enables developers to use the Camunda Decision Model and Notation (DMN) in Big Data

@@ -6,7 +6,7 @@
 
     <groupId>es.us.idea</groupId>
     <artifactId>dmn4spark</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <dependencies>
 
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.camunda.bpm.extension.feel.scala</groupId>
             <artifactId>feel-engine</artifactId>
-            <version>1.8.0</version>
+            <vegrsion>1.8.0</vegrsion>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-engine-factory -->
