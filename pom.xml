@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.camunda.bpm.extension.feel.scala</groupId>
             <artifactId>feel-engine</artifactId>
-            <vegrsion>1.8.0</vegrsion>
+            <version>1.8.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.feel.scala/feel-engine-factory -->
