@@ -1,6 +1,6 @@
 # dmn4spark
 
-![dmn4spark logo](logo/DMN4Spark.png)
+![dmn4spark logo](figures/DMN4Spark.png)
 
 dmn4spark is a library which enables developers to use the Camunda Decision Model and Notation (DMN) in Big Data
 environments with Apache Spark.
@@ -13,6 +13,13 @@ provides a set of data types and built-in function for making easier the constru
 its documentation for 
 
 ## Versions
+
+* dmn4spark 1.1.2. Dependencies:
+  * Scala 2.12
+  * Apache Spark 3.0.1
+  * [Feel Engine 1.14.0](https://github.com/camunda/feel-scala/tree/1.14.0/feel-engine)
+  * [Feel Engine Factory 1.14.0](https://github.com/camunda/feel-scala/tree/1.14.0/feel-engine-factory)
+  * [Camunda Engine DMN 7.10.0](https://github.com/camunda/camunda-engine-dmn/tree/7.10.0)
 
 * dmn4spark 1.1.1. Dependencies:
     * Scala 2.12
@@ -33,7 +40,7 @@ its documentation for
 
 ### Requirements
 
-You need a Maven project with Scala 2.12 and Apache Spark 2.4.0.
+You need a Maven project with Scala 2.12 and Apache Spark 3.0.1.
 
 ### Importing dependencies
 
@@ -104,7 +111,91 @@ to be included in the resulting Dataframe:
    .loadFromLocalPath("models/dmn-file.dmn")
  ```
 
+## Defining the DMN diagram
+
+* DMN table name: it is employed to give name to the resulting columns in the DataFrame. In addition, if you use the
+`setDecisions` method, you have to specify the decisions by means of the DMN tables (1).
+* Inputs and outputs: In the case of inputs, just specify their name in the "Input Label" field (3). 
+  If the input depends on the output of another DMN table, it is enough that this output is defined in the 
+  "Output Labeel" field (2).
+
+![dmn4spark logo](figures/example.png)
+
+
+## Common DMN modelling mistakes and workarounds
+
+We identified various common mistakes when defining DMN models for `dmn4spark`:
+
+### #1 Input which does not match any rule
+
+When an input does not match any rule in a DMN table, the Camunda DMN engine returns no resultks. When it occurs, 
+dmn4spark prints a `null` value in the column which corresponds with that DMN table. In addition, a log like this
+is produced: `[WARNING] DMNExecutor: The evaluation of the DMN Table with name (...) yielded no results`.
+
+It might be a problem especially if a DMN table depends on the output of another table which didn't produce any result,
+(see #2).
+
+### #2 DMN table does not find an input attribute
+
+In case a required input attribute couldn't be found, the Camunda DMN engine will throw an exception like this:
+
+`org.camunda.bpm.dmn.feel.impl.FeelException: failed to evaluate expression 'X': no variable found for name 'X'`
+
+It can occur when you defined an input variable, and it is not defined when evaluating a DMN table which depends on that
+input. 
+
+* (1) In case the missing variable is related to an attribute from the DataFrame, please make sure you defined it properly.
+* (2) In case the missing variable is related to the output of another DMN table, please make sure that such dependency
+is properly defined in the DMN diagram, and that the table which produces that variable always returns a valid value
+  (see 1).
+
+### #3 Input type mismatch
+
+When a DMN table receives an input whose data type does not match the type declared in the table, the Camunda DMN engine
+will throw an exception like this: 
+
+`org.camunda.bpm.dmn.engine.DmnEngineException: DMN-01005 Invalid value 'NA' for clause with type 'double'.`
+
+It might suppose a headache, especially in Big Data environments, where data generated and integrated from different
+sources might return different data types.
+The Camunda DMN Engine is not able to automatically cast data types. It can produce, for example, that attributes 
+declared as a string the Spark DataFrame, will produce a `DmnEngineException` in case that attribute is used in a DMN
+table declared as a number. 
+
+To work-around it, we propose to cast conflicting attributes to string in the Spark DataFrame, declaring those inputs as String
+in the DMN tables, and using a FEEL data type conversion function 
+
+More informatin on FEEL functions: 
+* [Camunda DMN: FEEL Language Elements](https://docs.camunda.org/manual/7.4/reference/dmn11/feel/language-elements/),
+* [FEEL-Scala built-in functions](https://camunda.github.io/feel-scala/docs/reference/builtin-functions/feel-built-in-functions-conversion)
+
+In future versions, we will support implicit and automatic data type conversions.
+
 ## Future work
 
+* Return the attributes corresponding with the DMN tables with the data types defined there (currently the results of the
+  DMN tables are always represented as strings).
+* Support implicit data types conversions.
+* Centralise the logging system and include the possibility of silencing them.
 * Support other DMN engines.
 * Support other languages for the dmn tables (e.g., `juel`)
+
+## Licence
+
+**Copyright (C) 2021 IDEA Research Group (IC258: Data-Centric Computing Research Hub)**
+
+In keeping with the traditional purpose of furthering education and research, **it is
+the policy of the copyright owner to permit non-commercial use and redistribution of
+this software**. It has been tested carefully, but it is not guaranteed for any particular
+purposes. **The copyright owner does not offer any warranties or representations, nor do
+they accept any liabilities with respect to them**.
+
+## References
+
+**If you use this tool, we kindly ask to to reference the following research article:**
+
+[1] Valencia-Parra, Á., Parody, L., Varela-Vaca, Á. J., Caballero, I., & Gómez-López, M. T. (2021). DMN4DQ: When data quality meets DMN. Decision Support Systems, 141, 113450. https://doi.org/10.1016/j.dss.2020.113450
+
+## Acknowledgements
+
+This work has been partially funded by the Ministry of Science and Technology of Spain via ECLIPSE (RTI2018-094283-B-C33 and RTI2018-094283-B-C31) projects; the Junta de Andalucíavia the COPERNICA and METAMORFOSIS projects; the European Fund (ERDF/FEDER); the Junta de Comunidades de Castilla-La Mancha via GEMA: Generation and Evaluation of Models for dAta quality (Ref.: SBPLY/17/180501/000293), and by the Universidad de Sevilla with VI Plan Propio de Investigación y Transferencia (VI PPIT-US).
