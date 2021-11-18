@@ -1,6 +1,6 @@
-package es.us.idea.dmn4spark
+package es.us.idea.dmn4spark.spark.dsl
 
-import es.us.idea.dmn4spark.dmn.DMNSparkEngine
+import es.us.idea.dmn4spark.spark.engine.DMNSparkEngine
 import org.apache.spark.sql.DataFrame
 
 object implicits {

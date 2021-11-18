@@ -1,18 +1,16 @@
-package es.us.idea.dmn4spark.dmn
+package es.us.idea.dmn4spark.spark.engine
 
-import java.io.{File, FileInputStream, IOException, InputStream}
-import java.net.{MalformedURLException, URI}
-
+import es.us.idea.dmn4spark.dmn.DMNExecutor
 import es.us.idea.dmn4spark.spark.{SparkDataConversor, Utils}
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, Row}
-import org.apache.commons.io.{FileUtils, IOUtils}
+import org.apache.commons.io.IOUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
-import org.apache.hadoop.fs.FSDataInputStream
-import org.apache.spark.sql.api.java.{UDF0, UDF1}
+import org.apache.spark.sql.api.java.UDF1
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, Row}
 
-import scala.collection.mutable.ArrayBuffer
+import java.io.{FileInputStream, InputStream}
+import java.net.{MalformedURLException, URI}
 import scala.io.Source
 
 // TODO: Include a parameter to allow hiding logs
