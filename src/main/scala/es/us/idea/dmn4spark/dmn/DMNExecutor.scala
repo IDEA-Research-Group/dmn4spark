@@ -44,16 +44,24 @@ class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Se
    * */
   @transient lazy val decisionKeys: Seq[String] = decisions.map(_.getName)
 
-  //@transient lazy val decisionsStructure: Map[String, ]
+  /**
+   * Name of the input attributes to the DMN
+   */
+  @transient lazy val modelInputs: Seq[String] =
+    decisions.flatMap(d => dmnEngine.parseDecision(d.getKey, dmnModelInstance)
+      .getDecisionLogic.asInstanceOf[DmnDecisionTableImpl].getInputs.asScala.map(_.getName))
+      .filterNot(d => decisions.map(_.getName).contains(d))
 
   /***
-   *
+   * TODO: Receive a scala map instead of java map
    * @param map input tuple from the DataFrame
    * @return a sequence indicating the decision made for each DMN table in the DMN diagram.
    *         If the DMN table has more than one output, it will print the results as a JSON object.
    *         If the DMN table returns more than one output, it will print the results as a JSON array.
    */
   def getDecisionsResults(map: java.util.HashMap[String, AnyRef]): Seq[Option[String]] = {
+    // TODO: check mdoelinputs, and instantiate java map with the values of data map. If input not present, set it as null
+
     decisions.map(d => {
 
       val evaluation = dmnEngine.evaluateDecisionTable(d, map)
