@@ -48,7 +48,7 @@ class DMNSparkDFEngine(
       override def call(t1: Row): Row = {
         val map = SparkRowToScalaTypesConversor.spark2map(t1)
         val start = System.currentTimeMillis()
-        val result = dmnExecutor.getDecisionsResults(map, selectedDecisions).map(_.result)
+        val result = dmnExecutor.getDecisionsResults(map, selectedDecisions).map(_.get.result) // TODO this optional should be safely accessed!!
         val time = System.currentTimeMillis() - start
         Row.apply((result :+ time.toString) : _*)
       }

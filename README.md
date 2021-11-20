@@ -71,7 +71,7 @@ Add the dmn4spark dependency
 Then, import the `dmn4spark` implicits:
 
 ```scala
-import es.us.idea.dmn4spark.spark.dsl.implicits._
+
 ```
 
 Now, you can load your DMN tables. You just have to call the `dmn` method on any Spark Dataframe. Then, you can specify
