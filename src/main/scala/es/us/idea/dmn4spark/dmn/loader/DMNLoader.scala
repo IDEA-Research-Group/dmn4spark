@@ -1,7 +1,7 @@
 package es.us.idea.dmn4spark.dmn.loader
 
-import es.us.idea.dmn4spark.dmn.DMNExecutor
 import es.us.idea.dmn4spark.dmn.exception.{DMN4SparkException, FailedToCreateDMNExecutor, FailedToReadException}
+import es.us.idea.dmn4spark.dmn.executor.DMNExecutor
 
 import scala.util.Try
 
