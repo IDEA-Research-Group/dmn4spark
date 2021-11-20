@@ -9,7 +9,7 @@ import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance}
 import collection.JavaConverters._
 import scala.collection.{JavaConverters, mutable}
 
-class DMNExecutor(input: Array[Byte], selectedDecisions: Seq[String]) extends Serializable{
+class DMNExecutor(input: Array[Byte]) extends Serializable{
 
   /*
    * @transient: since some of these objects are not serializable, by making them transient it forces them not to be
