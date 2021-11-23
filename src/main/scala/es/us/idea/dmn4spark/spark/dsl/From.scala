@@ -16,9 +16,9 @@ class From(df: DataFrame) {
     }
   }
 
-  def fromLocalFile(path: String): Load = new PathLoader(path)
-  def fromHDFS(uri: String, configuration: Configuration = new Configuration()): Load =
+  def localFile(path: String): Load = new PathLoader(path)
+  def hdfs(uri: String, configuration: Configuration = new Configuration()): Load =
     new HDFSLoader(uri, configuration)
-  def fromURL(url: String): Load = new URLLoader(url)
-  def fromInputStream(is: InputStream): Load = new InputStreamLoader(is)
+  def url(url: String): Load = new URLLoader(url)
+  def inputStream(is: InputStream): Load = new InputStreamLoader(is)
 }
