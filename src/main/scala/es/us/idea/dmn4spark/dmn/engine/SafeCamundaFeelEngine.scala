@@ -1,5 +1,6 @@
 package es.us.idea.dmn4spark.dmn.engine
 
+import org.apache.log4j.Logger
 import org.camunda.bpm.dmn.feel.impl.FeelException
 import org.camunda.bpm.engine.variable.context.VariableContext
 import org.camunda.feel.integration.CamundaValueMapper
@@ -11,6 +12,8 @@ import org.camunda.feel.spi.SpiServiceLoader
  * so that it does not throws any exception when evaluating the expressions.
  * */
 class SafeCamundaFeelEngine extends org.camunda.bpm.dmn.feel.impl.FeelEngine {
+
+  @transient lazy val logger: Logger = Logger.getLogger("SafeCamundaFeelEngine")
 
   private lazy val engine =
     new org.camunda.feel.FeelEngine(
@@ -47,13 +50,13 @@ class SafeCamundaFeelEngine extends org.camunda.bpm.dmn.feel.impl.FeelEngine {
     try {
       engine.evalUnaryTests(expression, context) match {
         case Right(value) => value
-        case Left(failure) =>  System.err.println(s"SAFE FeelEngine: Failure in evalUnaryTests: ${failure.message}." +
+        case Left(failure) =>  logger.warn(s"SAFE FeelEngine: Failure in evalUnaryTests: ${failure.message}." +
           s"Expression: $expression, " + s"inputVariable: $inputVariable, value: ${context.variable(inputVariable)}");
           false //throw new FeelException(failure.message)
       }
     } catch {
       case e: Exception =>
-        System.err.println(s"SAFE FeelEngine: Exception caught in evalUnaryTests: ${e}. Expression: $expression, " +
+        logger.warn(s"SAFE FeelEngine: Exception caught in evalUnaryTests: ${e}. Expression: $expression, " +
           s"inputVariable: $inputVariable, value: ${context.variable(inputVariable)}"); false
     }
   }

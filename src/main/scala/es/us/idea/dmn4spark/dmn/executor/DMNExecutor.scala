@@ -8,8 +8,11 @@ import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance}
 import java.io.ByteArrayInputStream
 import scala.collection.JavaConverters._
 import scala.collection.{JavaConverters, mutable}
+import org.apache.log4j.Logger
 
 class DMNExecutor(input: Array[Byte]) extends Serializable{
+
+  @transient lazy val logger: Logger = Logger.getLogger("DMNExecutor")
 
   /*
    * @transient: since some of these objects are not serializable, by making them transient it forces them not to be
@@ -80,7 +83,7 @@ class DMNExecutor(input: Array[Byte]) extends Serializable{
             //case i: Int if i>1 => Some("{" + x.map(t => s""""${t._1}": ${t._2.toString}""").mkString(", ") + "}")
             case i: Int if i>1 => Some(DecisionResult(decisionName = "["+x.map(t => s""""${t._1}""" ).mkString(", ")+"]",
               result = "["+x.map(t => s""""${t._2.toString}""" ).mkString(", ")+"]"))
-            case _ => System.err.println(s"[WARNING] DMNExecutor: The evaluation of the DMN Table with name ${d.getName} yielded no " +
+            case _ => logger.warn(s"[WARNING] DMNExecutor: The evaluation of the DMN Table with name ${d.getName} yielded no " +
               s"results.\n Please, revise your DMN Diagram:\n" +
               s"  1) Does the following input match any rule? ${javaMap.asScala.toString}\n" +
               s"  2) Have you correctly specified the dependencies? (${d.getName} requires the following tables: ${d.getRequiredDecisions.asScala.map(_.getName).mkString(", ")})\n" +
@@ -92,7 +95,7 @@ class DMNExecutor(input: Array[Byte]) extends Serializable{
         // If >1: returns a single DecisionResult, but decision=
         resultList.size() match {
           case i: Int => processMap(resultList.get(0).asScala)
-          case _ => System.err.println(s"[WARNING] DMNExecutor: The evaluation of the DMN Table with name ${d.getName} yielded no " +
+          case _ => logger.warn(s"[WARNING] DMNExecutor: The evaluation of the DMN Table with name ${d.getName} yielded no " +
             s"results.\n Please, revise your DMN Diagram:\n" +
             s"  1) Does the following input match any rule? ${javaMap.asScala.toString}\n" +
             s"  2) Have you correctly specified the dependencies? (${d.getName} requires the following tables: ${d.getRequiredDecisions.asScala.map(_.getName).mkString(", ")})\n" +
