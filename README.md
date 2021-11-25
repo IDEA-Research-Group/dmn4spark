@@ -14,7 +14,7 @@ its documentation for
 
 ## Versions
 
-* dmn4spark 1.2.0. Dependencies:
+* dmn4spark 1.2.1. Dependencies:
   * Scala 2.12
   * Apache Spark 3.1.2
   * [Feel Engine 1.14.0](https://github.com/camunda/feel-scala/tree/1.14.0/feel-engine)
